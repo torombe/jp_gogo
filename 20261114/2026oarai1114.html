@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 日本關東・九州 9日行程手冊</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+  <!-- Google Fonts Inter & Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+          },
+          colors: {
+            stone: {
+              50: '#fafaf9',
+              100: '#f5f5f4',
+              200: '#e7e5e4',
+              300: '#d6d3d1',
+              400: '#a8a29e',
+              500: '#78716c',
+              600: '#57534e',
+              700: '#44403c',
+              800: '#292524',
+              900: '#1c1917',
+            },
+            accent: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              600: '#16a34a',
+              700: '#15803d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f5f5f4;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #d6d3d1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a8a29e;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans antialiased min-h-screen selection:bg-stone-200">
+
+  <!-- Top Sticky Header -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-stone-200/80 transition-all">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <span class="w-8 h-8 rounded-lg bg-stone-900 text-stone-100 flex items-center justify-center font-semibold text-xs tracking-wider shadow-sm">
+          JP
+        </span>
+        <div>
+          <h1 class="text-sm sm:text-base font-bold text-stone-900 tracking-tight flex items-center gap-1.5">
+            大洗鮟鱇祭・北九州 9日遊
+            <span class="text-[11px] font-normal text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full">11/14 - 11/22</span>
+          </h1>
+          <p class="text-[11px] text-stone-500 hidden sm:block">水戶・大洗・笠間・福岡・祐德稻荷・豪斯登堡・門司港下關</p>
+        </div>
+      </div>
+
+      <!-- Quick Action Right -->
+      <div class="flex items-center space-x-2">
+        <button id="toggleTipsBtn" onclick="toggleModal('tipsModal')" class="inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-100 transition-colors text-stone-600 font-medium">
+          <i class="ph ph-lightbulb text-amber-600 text-sm"></i>
+          <span>重點筆記</span>
+        </button>
+        <button id="toggleBudgetBtn" onclick="selectDay('budget')" class="inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-100 transition-colors text-stone-600 font-medium">
+          <i class="ph ph-receipt text-stone-700 text-sm"></i>
+          <span class="hidden sm:inline">預算與票券</span>
+          <span class="sm:hidden">費用</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Day Navigation Bar (Horizontal Scrollable) -->
+    <div class="border-t border-stone-100 bg-white">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6">
+        <div id="dayNav" class="flex space-x-2 overflow-x-auto py-2.5 hide-scrollbar scroll-smooth">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-6 pb-24">
+
+    <!-- Day Title & Summary Card -->
+    <div id="dayHeaderContainer" class="mb-6 bg-white border border-stone-200/90 rounded-2xl p-5 shadow-sm transition-all">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div id="filterToolbar" class="flex flex-wrap items-center justify-between gap-3 mb-6">
+      <!-- Tag Filters -->
+      <div class="flex flex-wrap items-center gap-1.5 text-xs">
+        <button onclick="setFilter('all')" class="filter-btn px-3 py-1.5 rounded-full border border-stone-200 bg-stone-900 text-white font-medium transition-all" data-filter="all">全部</button>
+        <button onclick="setFilter('flight')" class="filter-btn px-3 py-1.5 rounded-full border border-stone-200 bg-white text-stone-600 hover:bg-stone-100 transition-all" data-filter="flight">✈️ 航班</button>
+        <button onclick="setFilter('train')" class="filter-btn px-3 py-1.5 rounded-full border border-stone-200 bg-white text-stone-600 hover:bg-stone-100 transition-all" data-filter="train">🚆 交通</button>
+        <button onclick="setFilter('spot')" class="filter-btn px-3 py-1.5 rounded-full border border-stone-200 bg-white text-stone-600 hover:bg-stone-100 transition-all" data-filter="spot">📍 景點</button>
+        <button onclick="setFilter('food')" class="filter-btn px-3 py-1.5 rounded-full border border-stone-200 bg-white text-stone-600 hover:bg-stone-100 transition-all" data-filter="food">🍱 美食</button>
+        <button onclick="setFilter('hotel')" class="filter-btn px-3 py-1.5 rounded-full border border-stone-200 bg-white text-stone-600 hover:bg-stone-100 transition-all" data-filter="hotel">🏨 住宿</button>
+      </div>
+
+      <!-- Quick Search & Reset Checklist -->
+      <div class="flex items-center gap-2 w-full sm:w-auto">
+        <div class="relative flex-1 sm:w-56">
+          <i class="ph ph-magnifying-glass absolute left-3 top-2.5 text-stone-400 text-sm"></i>
+          <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="搜尋行程、地點、美食..." class="w-full text-xs pl-8 pr-3 py-1.5 rounded-xl border border-stone-200 bg-white focus:outline-none focus:ring-2 focus:ring-stone-400 transition-all" />
+        </div>
+        <button onclick="clearCompletedForDay()" title="清除今日打勾紀錄" class="text-xs px-2.5 py-1.5 rounded-xl border border-stone-200 bg-white text-stone-500 hover:text-stone-800 hover:bg-stone-100 transition-all flex items-center gap-1">
+          <i class="ph ph-arrow-counter-clockwise"></i>
+          <span class="hidden md:inline">重置狀態</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Timeline Itinerary List -->
+    <div id="timelineContainer" class="relative space-y-4">
+      <!-- Items dynamically rendered by JS -->
+    </div>
+
+    <!-- Budget & Expenses Section (Conditional) -->
+    <div id="budgetContainer" class="hidden">
+      <!-- Rendered dynamically -->
+    </div>
+
+  </main>
+
+  <!-- Sticky Bottom Quick Toast Notification -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-stone-900 text-stone-100 text-xs px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300 transform translate-y-2">
+    <i class="ph ph-check-circle text-emerald-400 text-sm"></i>
+    <span id="toastMsg">已複製到剪貼簿</span>
+  </div>
+
+  <!-- Notes & Tips Modal Drawer -->
+  <div id="tipsModal" class="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white border border-stone-200 rounded-2xl w-full max-w-xl max-h-[85vh] overflow-hidden flex flex-col shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+      <div class="px-5 py-4 border-b border-stone-100 flex items-center justify-between bg-stone-50/50">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded-md bg-amber-100 text-amber-700 flex items-center justify-center text-xs">
+            <i class="ph ph-lightbulb-filament"></i>
+          </span>
+          <h3 class="font-bold text-stone-800 text-sm">行程重要筆記與備案指南</h3>
+        </div>
+        <button onclick="toggleModal('tipsModal')" class="text-stone-400 hover:text-stone-700 p-1">
+          <i class="ph ph-x text-lg"></i>
+        </button>
+      </div>
+      
+      <div class="p-5 overflow-y-auto space-y-4 text-xs text-stone-600 leading-relaxed">
+        <div class="bg-stone-50 p-3.5 rounded-xl border border-stone-200">
+          <h4 class="font-semibold text-stone-900 mb-1.5 flex items-center gap-1.5">
+            <i class="ph ph-film-strip text-stone-600"></i> 水戶電影院 (ユナイテッド・シネマ水戸) 場次參考
+          </h4>
+          <p class="text-stone-600">・<b>少女戰車 4DX劇場版</b>：(六) 17:10~18:19 / (日) 19:55~21:04</p>
+          <p class="text-stone-600">・<b>青春豬頭少年劇場版</b>：(六) 08:25～10:36 / (一) 08:25～10:36</p>
+          <p class="text-[11px] text-stone-400 mt-1">地點位於 COMBOX310 水戶站南口</p>
+        </div>
+
+        <div class="bg-stone-50 p-3.5 rounded-xl border border-stone-200">
+          <h4 class="font-semibold text-stone-900 mb-1.5 flex items-center gap-1.5">
+            <i class="ph ph-bicycle text-stone-600"></i> 笠間站行李寄放與租借單車 (11/16)
+          </h4>
+          <p>・<b>寄放行李</b>：笠間駅前觀光案內所可寄放。</p>
+          <p>・<b>租單車</b>：可騎乘至指定停放點「笠間稲荷門前通り（かさま歴史交流館井筒屋）」停放，請遵守指定劃設停放區域規範。</p>
+          <a href="https://www.kasama-kankou.jp/page/dir000082.html" target="_blank" rel="noopener" class="text-blue-600 hover:underline inline-flex items-center gap-1 mt-1 font-medium">
+            笠間觀光協會單車租借官網 <i class="ph ph-arrow-square-out"></i>
+          </a>
+        </div>
+
+        <div class="bg-stone-50 p-3.5 rounded-xl border border-stone-200">
+          <h4 class="font-semibold text-stone-900 mb-1.5 flex items-center gap-1.5">
+            <i class="ph ph-bus text-stone-600"></i> 水戶→茨城機場 備案時刻 (11/16)
+          </h4>
+          <p class="mb-1"><b>方案 A (直達巴士)</b>：水戶站南口4號月台 (11:20-12:00)，1,500円 (可用現金、交通IC卡、信用卡)。</p>
+          <div class="p-2 bg-white rounded border border-stone-200 font-mono text-[11px]">
+            <b>方案 B (JR常磐線至石岡轉車)</b>：<br/>
+            備案1：12:05-12:47 JR水戶→JR石岡，13:00-13:30 石岡直達車到機場<br/>
+            備案2：13:37-14:17 JR水戶→JR石岡，14:45-15:20 石岡直達車到機場
+          </div>
+        </div>
+
+        <div class="bg-stone-50 p-3.5 rounded-xl border border-stone-200">
+          <h4 class="font-semibold text-stone-900 mb-1.5 flex items-center gap-1.5">
+            <i class="ph ph-stamp text-stone-600"></i> 關門海底隧道紀念證 (関門TOPPA記念証)
+          </h4>
+          <p>徒步走完関門大橋人行隧道，並蓋下兩端紀念印章即可兌換紀念證！</p>
+          <p class="mt-1"><b>門司港側兌換處</b>：</p>
+          <ul class="list-disc list-inside space-y-0.5 text-stone-600">
+            <li>舊門司三井俱樂部（門司港懷舊區內，順道遊覽）</li>
+            <li>北九州市門司港車站觀光案內所（門司港車站內）</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="p-3 bg-stone-50 border-t border-stone-100 text-right">
+        <button onclick="toggleModal('tipsModal')" class="px-4 py-1.5 text-xs font-semibold bg-stone-900 text-white rounded-lg hover:bg-stone-800">
+          關閉
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ========================================================
+       TRIP DATA DEFINITIONS
+       ======================================================== */
+    const itineraryData = [
+      {
+        id: "day1",
+        date: "11/14",
+        weekday: "六",
+        title: "抵達日本・水戶・大洗探索",
+        highlights: "紅眼抵達羽田 ➔ 常陸特急抵達水戶 ➔ 大洗明太子與鳥居 ➔ 少戰電影 ➔ 薩莉亞",
+        hotel: "APA Hotel 水戶站前",
+        items: [
+          {
+            id: "d1-1",
+            time: "(11/14 五) 22:00",
+            category: "flight",
+            title: "抵達桃園機場 T1",
+            locationName: "桃園國際機場第一航廈",
+            query: "桃園國際機場第一航廈",
+            transit: "搭乘機捷/客運前往機場",
+            note: "準備搭乘台灣虎航 IT216 班機前往東京羽田",
+            cost: ""
+          },
+          {
+            id: "d1-2",
+            time: "00:10 ~ 04:00",
+            category: "flight",
+            title: "台灣虎航 IT216 (桃園 ➔ 羽田)",
+            locationName: "羽田機場第三航廈",
+            query: "羽田機場第3航廈",
+            transit: "飛行時間約 3 小時 50 分",
+            note: "清晨抵達羽田機場第三航廈",
+            cost: ""
+          },
+          {
+            id: "d1-3",
+            time: "04:30 ~ 05:20",
+            category: "food",
+            title: "羽田機場早餐",
+            locationName: "羽田機場第三航廈 Lawson",
+            query: "羽田機場第三航廈 羽田 Airport Garden Lawson",
+            transit: "步行",
+            note: "空港第三航廈、羽田 Airport Garden Lawson 購買早點休息（暫定）",
+            cost: ""
+          },
+          {
+            id: "d1-4",
+            time: "05:26 ~ 06:15",
+            category: "train",
+            title: "羽田空港 ➔ 品川駅",
+            locationName: "品川駅",
+            query: "品川駅",
+            transit: "京急機場線 (05:26 頭班車)",
+            note: "抵達品川轉乘 JR 常磐線特急",
+            cost: "410円"
+          },
+          {
+            id: "d1-5",
+            time: "06:45 ~ 08:10",
+            category: "train",
+            title: "品川駅 ➔ 水戶駅",
+            locationName: "水戶駅",
+            query: "水戶駅",
+            transit: "JR特急 Hitachi（常陸 1 號 磐城行）9號月台發",
+            note: "舒適直達水戶，可在車上稍作補眠",
+            cost: "3,890円"
+          },
+          {
+            id: "d1-6",
+            time: "08:20",
+            category: "hotel",
+            title: "放行李 @ APA Hotel 水戶站前",
+            locationName: "APA Hotel 水戶站前",
+            query: "APA Hotel Mito Ekimae 水戶站前",
+            transit: "水戶站徒步約 3 分",
+            note: "櫃檯寄放行李（15:00 後方可辦理入住）或車站置物櫃",
+            cost: ""
+          },
+          {
+            id: "d1-7",
+            time: "08:50 ~ 09:10",
+            category: "train",
+            title: "水戶駅 ➔ 大洗駅",
+            locationName: "大洗駅",
+            query: "大洗駅",
+            transit: "鹿島臨海鐵道大洗鹿島線",
+            note: "抵達少女與戰車聖地大洗",
+            cost: "420円"
+          },
+          {
+            id: "d1-8",
+            time: "09:30 ~ 12:00",
+            category: "spot",
+            title: "大洗神社鳥居・明太子工廠・祭典前夜街",
+            locationName: "大洗磯前神社 神磯鳥居",
+            query: "大洗磯前神社 神磯的鳥居",
+            transit: "大洗循環巴士海遊號 或 步行",
+            note: "Mentai Park 明太子工廠參觀、大洗磯前神社海上鳥居參拜、逛祭典前夕街區",
+            cost: ""
+          },
+          {
+            id: "d1-9",
+            time: "12:00 ~ 13:30",
+            category: "food",
+            title: "午餐：お好み焼き 道 (大阪燒)",
+            locationName: "お好み焼き 道 (大洗)",
+            query: "お好み焼き 道 大洗",
+            transit: "步行",
+            note: "少戰大洗名物，享受在地道地的大阪燒與炒麵",
+            cost: ""
+          },
+          {
+            id: "d1-10",
+            time: "14:00 ~ 14:20",
+            category: "train",
+            title: "大洗駅 ➔ 水戶駅",
+            locationName: "水戶駅",
+            query: "水戶駅",
+            transit: "鹿島臨海鐵道大洗鹿島線",
+            note: "返回水戶市區",
+            cost: "420円"
+          },
+          {
+            id: "d1-11",
+            time: "15:30 ~ 17:30",
+            category: "spot",
+            title: "電影：少女與戰車 (COMBOX310)",
+            locationName: "United Cinemas Mito COMBOX310",
+            query: "ユナイテッド・シネマ水戸 COMBOX310",
+            transit: "水戶站南口直通",
+            note: "UNITED CINEMAS 水戶 (4DX版依場次調整，周六場次參考: 17:10~18:19)",
+            cost: ""
+          },
+          {
+            id: "d1-12",
+            time: "18:30 ~ 20:00",
+            category: "food",
+            title: "晚餐：薩莉亞 (Saizeriya)",
+            locationName: "薩莉亞 水戶站南口OPA",
+            query: "サイゼリヤ 水戸サウスタワー OPA",
+            transit: "步行",
+            note: "水戶站南口 OPA 棟內，平價義大利家常美味",
+            cost: ""
+          },
+          {
+            id: "d1-13",
+            time: "20:30",
+            category: "hotel",
+            title: "回飯店辦理入住休息",
+            locationName: "APA Hotel 水戶站前",
+            query: "APA Hotel Mito Ekimae 水戶站前",
+            transit: "步行",
+            note: "儲備體力迎接明日重頭戲「大洗鮟鱇祭」",
+            cost: ""
+          }
+        ]
+      },
+      {
+        id: "day2",
+        date: "11/15",
+        weekday: "日",
+        title: "大洗鮟鱇祭盛典",
+        highlights: "大洗鮟鱇祭 ➔ 鮟鱇魚解體秀 ➔ 屋台美食 ➔ 晚間名物鮟鱇魚火鍋",
+        hotel: "APA Hotel 水戶站前",
+        items: [
+          {
+            id: "d2-1",
+            time: "07:30 ~ 08:00",
+            category: "train",
+            title: "水戶駅 ➔ 大洗駅",
+            locationName: "大洗駅",
+            query: "大洗駅",
+            transit: "鹿島臨海鐵道大洗鹿島線",
+            note: "鮟鱇祭當日人潮眾多，建議提早出發卡位",
+            cost: "420円"
+          },
+          {
+            id: "d2-2",
+            time: "08:30 ~ 12:00",
+            category: "spot",
+            title: "大洗鮟鱇祭（吊掛切魚秀、特設舞台、攤位巡禮）",
+            locationName: "大洗第四埠頭 (鮟鱇祭主會場)",
+            query: "大洗第四埠頭 大洗鮟鱇祭",
+            transit: "大洗站步行或祭典專用接駁車",
+            note: "觀賞傳統經典的「吊るし切り」（鮟鱇魚吊切秀）、少女與戰車聲優舞台、祭典攤位",
+            cost: "免費入場"
+          },
+          {
+            id: "d2-3",
+            time: "12:00 ~ 13:30",
+            category: "food",
+            title: "午餐：祭典屋台在地美食",
+            locationName: "大洗鮟鱇祭會場攤位",
+            query: "大洗港 祭典會場",
+            transit: "會場內隨意逛逛",
+            note: "品嚐祭典限定鮟鱇魚湯（あんこう汁）、大洗名物烤糰子、在地海鮮燒烤",
+            cost: ""
+          },
+          {
+            id: "d2-4",
+            time: "14:00 ~ 16:30",
+            category: "spot",
+            title: "大洗商店街痛車巡禮 & 神社鳥居巡禮",
+            locationName: "大洗商店街",
+            query: "大洗 髭釜商店街",
+            transit: "步行巡迴",
+            note: "商店街店家角色看板合照、特色動漫佈置拍照與集章",
+            cost: ""
+          },
+          {
+            id: "d2-5",
+            time: "17:00 ~ 19:00",
+            category: "food",
+            title: "晚餐：頂級鮟鱇魚火鍋 (あんこう鍋)",
+            locationName: "浜っこ食堂 お魚天国",
+            query: "浜っこ食堂 お魚天国 大洗",
+            transit: "步行",
+            note: "首選：浜っこ食堂 お魚天国；備案：えんやどっと丸 或 大洗お魚天国 海鮮食事処。天冷吃濃郁鮟鱇肝味噌鍋最對味！",
+            cost: ""
+          },
+          {
+            id: "d2-6",
+            time: "19:30 ~ 20:00",
+            category: "train",
+            title: "大洗駅 ➔ 水戶駅",
+            locationName: "水戶駅",
+            query: "水戶駅",
+            transit: "鹿島臨海鐵道大洗鹿島線",
+            note: "返回水戶（或前往ユナイテッド・シネマ水戶看19:55場次少戰4DX）",
+            cost: "420円"
+          },
+          {
+            id: "d2-7",
+            time: "20:30",
+            category: "hotel",
+            title: "回飯店休息",
+            locationName: "APA Hotel 水戶站前",
+            query: "APA Hotel Mito Ekimae 水戶站前",
+            transit: "步行",
+            note: "整理行李，明日準備出發前往九州福岡",
+            cost: ""
+          }
+        ]
+      },
+      {
+        id: "day3",
+        date: "11/16",
+        weekday: "一",
+        title: "笠間菊花祭・搭國內線跨島至福岡",
+        highlights: "笠間稻荷神社 ➔ 水戶午餐 ➔ 茨城機場搭天馬航空 ➔ 博多領JR PASS ➔ 一慶牛腸鍋",
+        hotel: "The b 博多 (The b Hakata)",
+        items: [
+          {
+            id: "d3-1",
+            time: "08:00 ~ 08:35",
+            category: "train",
+            title: "水戶駅 ➔ 笠間駅",
+            locationName: "JR 笠間駅",
+            query: "JR 笠間駅",
+            transit: "JR 水戶線",
+            note: "於笠間駅前觀光案內所寄放行李，並租借觀光腳踏車",
+            cost: ""
+          },
+          {
+            id: "d3-2",
+            time: "09:00 ~ 11:00",
+            category: "spot",
+            title: "笠間稻荷神社 (11月菊花祭)",
+            locationName: "笠間稻荷神社",
+            query: "笠間稻荷神社",
+            transit: "騎自行車至停放點「かさま歴史交流館井筒屋」",
+            note: "日本三大稻荷之一，正值11月菊花祭盛宴，參道古色古香",
+            cost: "免費參觀"
+          },
+          {
+            id: "d3-3",
+            time: "11:47 ~ 12:01",
+            category: "train",
+            title: "笠間駅 ➔ 水戶駅",
+            locationName: "水戶駅",
+            query: "水戶駅",
+            transit: "JR 水戶線",
+            note: "歸還單車與取回行李，搭車返回水戶車站",
+            cost: ""
+          },
+          {
+            id: "d3-4",
+            time: "12:10 ~ 13:00",
+            category: "food",
+            title: "午餐：水戶站周邊美食",
+            locationName: "水戶站 Excel 購物中心",
+            query: "水戶站 Excel 本館",
+            transit: "水戶站內",
+            note: "水戶站內商場品嚐水戶常陸牛便當或在地拉麵",
+            cost: ""
+          },
+          {
+            id: "d3-5",
+            time: "13:30 ~ 14:15",
+            category: "train",
+            title: "水戶駅 ➔ 茨城空港 (巴士)",
+            locationName: "茨城機場",
+            query: "茨城空港",
+            transit: "茨城空港線高速巴士 (水戶站南口 4 號站牌)",
+            note: "車費1,500円（可刷卡/交通卡），若時間調配亦有11:20班次或石岡轉乘備案",
+            cost: "1,500円"
+          },
+          {
+            id: "d3-6",
+            time: "16:15 ~ 18:20",
+            category: "flight",
+            title: "茨城機場 ➔ 福岡機場 (SKY 835)",
+            locationName: "福岡空港國內線航廈",
+            query: "福岡空港國內線",
+            transit: "天馬航空 Skymark 835 航班",
+            note: "橫跨日本國內線直飛九州福岡，航程約2小時5分",
+            cost: "約 2,000 NTD"
+          },
+          {
+            id: "d3-7",
+            time: "18:40 ~ 19:15",
+            category: "train",
+            title: "福岡機場 ➔ 博多駅",
+            locationName: "博多駅",
+            query: "JR 博多駅",
+            transit: "福岡市地下鐵機場線 (2站約5分鐘)",
+            note: "極度便利！到博多站綠色窗口領取「JR PASS 北九州版」並劃位接下來幾天特急指定席",
+            cost: "260円"
+          },
+          {
+            id: "d3-8",
+            time: "19:30 ~ 21:00",
+            category: "food",
+            title: "晚餐：博多牛腸鍋 一慶 (JRJP博多大樓店)",
+            locationName: "もつ鍋 一慶 JRJP博多ビル店",
+            query: "博多もつ鍋 一慶 JRJP博多ビル店",
+            transit: "博多站旁 JRJP大樓地下街",
+            note: "知名炙燒牛腸鍋（炙りもつ鍋），濃郁湯頭與焦香牛腸超級下飯下酒",
+            cost: ""
+          },
+          {
+            id: "d3-9",
+            time: "21:15",
+            category: "hotel",
+            title: "入住飯店：The b 博多",
+            locationName: "The b 博多",
+            query: "The b hakata",
+            transit: "博多站筑紫口步行約4分鐘",
+            note: "博多筑紫口旁，位置優越，連續入住多晚的基地",
+            cost: ""
+          }
+        ]
+      },
+      {
+        id: "day4",
+        date: "11/17",
+        weekday: "二",
+        title: "佐賀祐德稻荷神社・福岡鋼彈 LaLaport",
+        highlights: "特急喜鵲號 ➔ 日本三大稻荷「祐德神社」集看板 ➔ 鰻魚飯 ➔ 實體大Nu鋼彈 ➔ 燒肉吃到飽",
+        hotel: "The b 博多",
+        items: [
+          {
+            id: "d4-1",
+            time: "07:55 ~ 08:58",
+            category: "train",
+            title: "JR博多駅 ➔ JR肥前鹿島駅",
+            locationName: "JR 肥前鹿島駅",
+            query: "肥前鹿島駅",
+            transit: "JR九州特急 喜鵲號 (Kasasagi 101號)",
+            note: "6站，持JR Pass免費劃位或自費 (原價3,130円)",
+            cost: "JR PASS"
+          },
+          {
+            id: "d4-2",
+            time: "09:08 ~ 09:25",
+            category: "train",
+            title: "肥前鹿島駅 ➔ 祐德神社前",
+            locationName: "祐德稻荷神社",
+            query: "祐德稻荷神社",
+            transit: "祐德巴士 (佐賀線 或 嬉野線)",
+            note: "車程約15分鐘，單程360円",
+            cost: "360円"
+          },
+          {
+            id: "d4-3",
+            time: "09:30 ~ 12:00",
+            category: "spot",
+            title: "祐德稻荷神社參拜 & 門前商店街",
+            locationName: "祐德稻荷神社",
+            query: "祐德稻荷神社 本殿",
+            transit: "步行",
+            note: "【今日任務】在所有寫著「祐德」字樣的招牌下拍照打卡！參拜壯觀懸造本殿、奧之院、祐德博物館",
+            cost: ""
+          },
+          {
+            id: "d4-4",
+            time: "12:00 ~ 13:00",
+            category: "food",
+            title: "午餐：門前町鰻魚飯 / 定食",
+            locationName: "祐德門前商店街 壽司政 / 家督屋",
+            query: "祐德門前商店街",
+            transit: "門前町步行",
+            note: "推薦選擇：壽司政、家督屋定食烏龍麵、三都屋烏龍麵、立花屋定食丼飯",
+            cost: ""
+          },
+          {
+            id: "d4-5",
+            time: "13:30 ~ 13:50",
+            category: "train",
+            title: "祐德神社前 ➔ JR肥前鹿島駅",
+            locationName: "肥前鹿島駅",
+            query: "肥前鹿島駅",
+            transit: "祐德巴士 (~13:40前搭車)",
+            note: "返回肥前鹿島站準備搭乘特急",
+            cost: "360円"
+          },
+          {
+            id: "d4-6",
+            time: "14:50 ~ 15:53",
+            category: "train",
+            title: "JR肥前鹿島 ➔ JR博多駅",
+            locationName: "JR 博多駅",
+            query: "博多駅",
+            transit: "JR九州特急 喜鵲號 (Kasasagi 108號)",
+            note: "順利返回博多，若早到亦可提前班次返程",
+            cost: "JR PASS"
+          },
+          {
+            id: "d4-7",
+            time: "16:20 ~ 18:00",
+            category: "spot",
+            title: "LaLaport 福岡 (實體大Nu鋼彈、鋼彈基地)",
+            locationName: "LaLaport 福岡",
+            query: "LaLaport 福岡 鋼彈",
+            transit: "博多站搭乘專線公車直達約20分",
+            note: "朝聖4樓 THE GUNDAM BASE FUKUOKA、2樓 LOFT、戶外1:1 RG Nu鋼彈立像合照",
+            cost: ""
+          },
+          {
+            id: "d4-8",
+            time: "18:00 ~ 19:30",
+            category: "food",
+            title: "晚餐：上村牧場 燒肉吃到飽",
+            locationName: "幸せの焼肉食べ放題 かみむら牧場 ららぽーと福岡店",
+            query: "かみむら牧場 ららぽーと福岡店",
+            transit: "LaLaport 館內",
+            note: "特選黑毛和牛與極上燒肉吃到飽，特急列車軌道自動送餐",
+            cost: ""
+          },
+          {
+            id: "d4-9",
+            time: "20:00",
+            category: "hotel",
+            title: "返回 The b 博多 休息",
+            locationName: "The b 博多",
+            query: "The b hakata",
+            transit: "搭公車回博多站",
+            note: "早點休息，明天準備暢遊豪斯登堡",
+            cost: ""
+          }
+        ]
+      },
+      {
+        id: "day5",
+        date: "11/18",
+        weekday: "三",
+        title: "長崎豪斯登堡 Day 1",
+        highlights: "特急豪斯登堡號 ➔ 荷蘭歐風王國 ➔ 恐龍島冒險 ➔ EVA 集章 ➔ 佐世保漢堡 ➔ 起司鍋",
+        hotel: "豪斯登堡園區飯店",
+        items: [
+          {
+            id: "d5-1",
+            time: "08:39 ~ 10:22",
+            category: "train",
+            title: "JR博多駅 ➔ 豪斯登堡駅",
+            locationName: "豪斯登堡車站",
+            query: "豪斯登堡車站",
+            transit: "JR特急豪斯登堡 11號 (直達)",
+            note: "使用JR PASS劃位車票（原價4,750円），直達歐風樂園門口",
+            cost: "JR PASS"
+          },
+          {
+            id: "d5-2",
+            time: "10:30 ~ 12:30",
+            category: "spot",
+            title: "入園豪斯登堡 & 侏儸紀島 (狩獵恐龍冒險)",
+            locationName: "豪斯登堡 侏儸紀島 Jurassic Island",
+            query: "豪斯登堡 Jurassic Island",
+            transit: "搭乘園區船艇前往無人島",
+            note: "【必玩推薦】搭船登上無人島，手持雷射步槍實境狩獵恐龍AR體驗",
+            cost: "門票包含"
+          },
+          {
+            id: "d5-3",
+            time: "12:30 ~ 13:30",
+            category: "food",
+            title: "午餐：正宗佐世保巨大漢堡 (Sasebo Burger)",
+            locationName: "豪斯登堡 佐世保漢堡",
+            query: "ハウステンボス 佐世保バーガー ビッケンビッケン",
+            transit: "園區港口城",
+            note: "厚切培根、煎蛋與濃郁起司肉排現點現做，長崎代表性靈魂美食",
+            cost: ""
+          },
+          {
+            id: "d5-4",
+            time: "14:00 ~ 17:30",
+            category: "spot",
+            title: "福音戰士集章任務 & 歐風街道漫步",
+            locationName: "豪斯登堡 娛樂設施城",
+            query: "豪斯登堡 德姆特倫高塔",
+            transit: "運河遊艇或園區漫步",
+            note: "挑戰「福音戰士 EVANGELION」園區聯名集章活動，登德姆特倫高塔俯瞰全園海灣風景",
+            cost: ""
+          },
+          {
+            id: "d5-5",
+            time: "18:00 ~ 19:30",
+            category: "food",
+            title: "晚餐：荷蘭起司火鍋料理 (Cheese Fondue)",
+            locationName: "Cheese Waag 起司火鍋",
+            query: "チーズワーフ ハウステンボス",
+            transit: "阿姆斯特丹城市區",
+            note: "香濃熱騰騰的起司鍋裹上麵包、時蔬與肉品，經典歐式饗宴",
+            cost: ""
+          },
+          {
+            id: "d5-6",
+            time: "19:30 ~ 21:00",
+            category: "spot",
+            title: "夜間光之王國 璀璨點燈與燈光秀",
+            locationName: "豪斯登堡 光之王國",
+            query: "豪斯登堡 藝術花園 光之王國",
+            transit: "園區內",
+            note: "全球最大規模一千三百萬顆燈泡夜間點燈，不可錯過的夢幻燈光水舞秀",
+            cost: ""
+          },
+          {
+            id: "d5-7",
+            time: "21:30",
+            category: "hotel",
+            title: "入住豪斯登堡飯店",
+            locationName: "豪斯登堡飯店",
+            query: "Hotel Huis Ten Bosch",
+            transit: "園區步行或專用接駁車",
+            note: "夜宿異國風情度假飯店（52,384 JPY/兩人）",
+            cost: "已預訂"
+          }
+        ]
+      },
+      {
+        id: "day6",
+        date: "11/19",
+        weekday: "四",
+        title: "長崎豪斯登堡 Day 2・返回福岡",
+        highlights: "荷蘭風車花海 ➔ VR科技館 ➔ 傍晚搭特急回博多 ➔ 博多屋台拉麵居酒屋",
+        hotel: "The b 博多",
+        items: [
+          {
+            id: "d6-1",
+            time: "09:00 ~ 12:00",
+            category: "spot",
+            title: "豪斯登堡 風車花園散策與VR體驗設施",
+            locationName: "豪斯登堡 風車區",
+            query: "豪斯登堡 風車花園",
+            transit: "園區巡迴",
+            note: "白天的風車花園、VR過山車、巧克力伯爵館與各項室內人氣遊樂設施",
+            cost: ""
+          },
+          {
+            id: "d6-2",
+            time: "12:00 ~ 13:30",
+            category: "food",
+            title: "午餐：園區歐風洋食 或 長崎雜錦麵 (強棒麵)",
+            locationName: "豪斯登堡 港口城餐廳",
+            query: "豪斯登堡 餐廳",
+            transit: "步行",
+            note: "享用在地濃郁湯頭的長崎強棒麵（ちゃんぽん）或土耳其飯",
+            cost: ""
+          },
+          {
+            id: "d6-3",
+            time: "13:30 ~ 15:30",
+            category: "spot",
+            title: "伴手禮採購：長崎蛋糕 Castella & 荷蘭起司",
+            locationName: "豪斯登堡 紀念品旗艦店",
+            query: "豪斯登堡 伴手禮城",
+            transit: "步行",
+            note: "購買文明堂或福砂屋聯名長崎蛋糕、各式荷蘭風味乾酪帶回台灣",
+            cost: ""
+          },
+          {
+            id: "d6-4",
+            time: "16:00 ~ 18:00",
+            category: "train",
+            title: "豪斯登堡駅 ➔ JR博多駅",
+            locationName: "JR 博多駅",
+            query: "JR 博多駅",
+            transit: "JR特急 豪斯登堡號 (返回博多)",
+            note: "持 JR PASS 預約指定席，舒服睡回博多市中心",
+            cost: "JR PASS"
+          },
+          {
+            id: "d6-5",
+            time: "18:30 ~ 20:30",
+            category: "food",
+            title: "晚餐：博多地下街居酒屋 / 中洲屋台風味料理",
+            locationName: "博多 筑紫口居酒屋街",
+            query: "博多車站 居酒屋",
+            transit: "博多站周邊",
+            note: "享受福岡炭火串燒、一口餃子與冰涼在地啤酒",
+            cost: ""
+          },
+          {
+            id: "d6-6",
+            time: "21:00",
+            category: "hotel",
+            title: "回飯店休息：The b 博多",
+            locationName: "The b 博多",
+            query: "The b hakata",
+            transit: "步行約4分",
+            note: "充電休息，明天迎接跨海峽與巖流島大冒險",
+            cost: ""
+          }
+        ]
+      },
+      {
+        id: "day7",
+        date: "11/20",
+        weekday: "五",
+        title: "小倉・關門海峽・巖流島・下關吃河豚",
+        highlights: "音速號特急 ➔ 連絡船登巖流島尋阿柏蛇 ➔ 唐戶市場河豚大餐 ➔ 走關門海底隧道 ➔ 門司港燒咖哩 ➔ 小倉夜景",
+        hotel: "The b 博多",
+        items: [
+          {
+            id: "d7-1",
+            time: "08:02 ~ 08:56",
+            category: "train",
+            title: "JR博多駅 ➔ 小倉駅",
+            locationName: "JR 小倉駅",
+            query: "小倉駅",
+            transit: "特急 ソニック5号 (Sonic 大分行) 2號月台",
+            note: "車費 3,060円 (JR PASS 適用)",
+            cost: "JR PASS"
+          },
+          {
+            id: "d7-2",
+            time: "08:59 ~ 09:14",
+            category: "train",
+            title: "小倉駅 ➔ 門司港駅",
+            locationName: "JR 門司港駅",
+            query: "門司港駅",
+            transit: "JR 鹿兒島本線 (門司港行) 4號月台",
+            note: "古色古香的大正風情門司港站舍，若錯過等下一班即可",
+            cost: ""
+          },
+          {
+            id: "d7-3",
+            time: "09:40 ~ 09:45",
+            category: "train",
+            title: "門司港棧橋 ➔ 下關 (唐戶碼頭)",
+            locationName: "唐戶ターミナル (下關)",
+            query: "唐戶碼頭 下關",
+            transit: "關門汽船 (海峽連絡船)",
+            note: "乘船只要5分鐘即可跨越九州與本州，單程 400円",
+            cost: "400円"
+          },
+          {
+            id: "d7-4",
+            time: "10:25 ~ 11:30",
+            category: "spot",
+            title: "唐戶碼頭 ➔ 巖流島 (宮本武藏與佐佐木小次郎決鬥地)",
+            locationName: "巖流島 (舟島)",
+            query: "巌流島 下關",
+            transit: "唐戶搭船往返 (約10分鐘，船票900円)",
+            note: "尋找傳說中的「寶可夢阿柏蛇人孔蓋（ポケふた）」！漫步武藏小次郎雕像公園",
+            cost: "900円"
+          },
+          {
+            id: "d7-5",
+            time: "12:00 ~ 13:30",
+            category: "food",
+            title: "午餐：唐戶市場「活きいき馬関街」吃頂級河豚",
+            locationName: "唐戶市場",
+            query: "唐戶市場 下關",
+            transit: "唐戶碼頭徒步2分",
+            note: "【市場必吃】河豚生魚片盤（ふく刺し）、鮮美熱呼呼河豚味噌湯、香酥炸河豚塊、握壽司拼盤",
+            cost: ""
+          },
+          {
+            id: "d7-6",
+            time: "13:30 ~ 15:30",
+            category: "spot",
+            title: "逛下關名勝：卡蒙碼頭・赤間神宮・日清講和紀念館",
+            locationName: "赤間神宮",
+            query: "赤間神宮 下關",
+            transit: "沿海濱步道漫步",
+            note: "參觀朱紅如龍宮的赤間神宮、春帆樓與簽署馬關條約的日清講和紀念館、みもすそ川公園（壇之浦源平合戰終焉古戰場）",
+            cost: "免費"
+          },
+          {
+            id: "d7-7",
+            time: "15:30 ~ 17:00",
+            category: "spot",
+            title: "徒步穿越：關門海底人行隧道 (跨越縣境)",
+            locationName: "関門人道トンネル (門司側)",
+            query: "関門人道トンネル 門司側",
+            transit: "海底人行步道步行 (約780公尺)",
+            note: "在海底拍跨越山口縣與福岡縣邊界！兩端蓋紀念章，於舊門司三井俱樂部或門司港站領取「関門TOPPA記念証」！",
+            cost: "通行免費"
+          },
+          {
+            id: "d7-8",
+            time: "17:00 ~ 19:30",
+            category: "food",
+            title: "晚餐雙路線選擇：門司港燒咖哩 vs 小倉燒烏龍麵",
+            locationName: "門司港 BEAR FRUITS / 伽哩本舗",
+            query: "BEAR FRUITS 門司港 燒咖哩",
+            transit: "門司港懷舊區 或 電車回小倉",
+            note: "路線一 (門司港)：BEAR FRUITS (正統焗烤咖哩+在地啤酒)、伽哩本舗、Princess Phi Phi香蕉啤酒、蜜蜂咖哩。<br/>路線二 (小倉)：だるま堂燒烏龍、資さんうどん、シロヤ小倉麵包、炸魚餅與車站二手店",
+            cost: ""
+          },
+          {
+            id: "d7-9",
+            time: "19:48 或 20:19",
+            category: "train",
+            title: "門司港駅 / 小倉駅 ➔ JR博多駅",
+            locationName: "JR 博多駅",
+            query: "博多駅",
+            transit: "JR 鹿兒島本線快速 (荒木行) 或 特急音速號",
+            note: "返抵博多市區，可順道眺望海峽夢之塔夜景",
+            cost: "JR PASS"
+          },
+          {
+            id: "d7-10",
+            time: "21:30",
+            category: "hotel",
+            title: "回飯店：The b 博多",
+            locationName: "The b 博多",
+            query: "The b hakata",
+            transit: "步行",
+            note: "完成精彩海峽大冒險",
+            cost: ""
+          }
+        ]
+      },
+      {
+        id: "day8",
+        date: "11/21",
+        weekday: "六",
+        title: "博多運河城・天神動漫與潮流大採購",
+        highlights: "博多運河城 ➔ 鋼彈基地 ➔ 燒肉 Bakuro ➔ 天神 PARCO 吉伊卡哇/萬代 ➔ 駿河屋/Mandarake",
+        hotel: "The b 博多",
+        items: [
+          {
+            id: "d8-1",
+            time: "09:30 ~ 10:00",
+            category: "train",
+            title: "博多 ➔ 櫛田神社前駅",
+            locationName: "櫛田神社前駅",
+            query: "櫛田神社前駅",
+            transit: "福岡市地下鐵七隈線",
+            note: "出站即達博多運河城商圈",
+            cost: "210円"
+          },
+          {
+            id: "d8-2",
+            time: "10:00 ~ 12:00",
+            category: "spot",
+            title: "博多運河城 (Canal City Hakata) 開店巡禮",
+            locationName: "博多運河城 Canal City Hakata",
+            query: "博多運河城",
+            transit: "商場步行",
+            note: "必逛熱點：B1 巨型扭蛋轉蛋專門店、1樓 THE GUNDAM BASE 鋼彈基地、4樓 動漫周邊二手名店 指南針 (Compass)",
+            cost: ""
+          },
+          {
+            id: "d8-3",
+            time: "12:00 ~ 13:30",
+            category: "food",
+            title: "午餐：燒肉 Bakuro 福岡 (極上黑毛和牛)",
+            locationName: "焼肉Bakuro (博多店/西新店)",
+            query: "焼肉Bakuro 博多店",
+            transit: "運河城周邊步行",
+            note: "牧場直送鹿兒島黑毛和牛燒肉，肉質細緻油花極致（暫定熱門店）",
+            cost: ""
+          },
+          {
+            id: "d8-4",
+            time: "13:45 ~ 14:00",
+            category: "train",
+            title: "櫛田神社前 ➔ 天神南 / 天神駅",
+            locationName: "天神駅",
+            query: "天神駅 福岡",
+            transit: "福岡市地下鐵七隈線直通天神南",
+            note: "迅速轉移陣地至九州最大的天神商圈",
+            cost: "210円"
+          },
+          {
+            id: "d8-5",
+            time: "14:00 ~ 18:30",
+            category: "spot",
+            title: "天神動漫潮店與百貨狂歡搜刮",
+            locationName: "福岡 PARCO 本館",
+            query: "福岡 PARCO",
+            transit: "天神地下街與各館步行",
+            note: "【目標攻略清單】<br/>1. <b>福岡 PARCO</b>：8F 吉伊卡哇 Chiikawa 專賣店、COSPA、KiddyLand；7F 萬代官方轉蛋扭蛋店；3F MARVEL 專賣店；B1 迪士尼商店<br/>2. <b>二手尋寶</b>：BOOKOFF SUPER BAZAAR、MANDARAKE (まんだらけ) 福岡店、駿河屋<br/>3. <b>生活文具</b>：天神 LOFT",
+            cost: ""
+          },
+          {
+            id: "d8-6",
+            time: "18:30 ~ 20:30",
+            category: "food",
+            title: "晚餐：天神人氣美食 (水炊雞肉鍋 / 鐵板餃子)",
+            locationName: "天神美食街",
+            query: "天神 美食 福岡",
+            transit: "商圈內",
+            note: "可在天神地下街或商場品嚐博多水炊鍋、一蘭總本店或人氣排隊甜點",
+            cost: ""
+          },
+          {
+            id: "d8-7",
+            time: "21:00",
+            category: "hotel",
+            title: "回飯店整理戰利品：The b 博多",
+            locationName: "The b 博多",
+            query: "The b hakata",
+            transit: "地鐵回博多",
+            note: "最後一晚！打包戰利品與確認明日回程登機行李重量",
+            cost: ""
+          }
+        ]
+      },
+      {
+        id: "day9",
+        date: "11/22",
+        weekday: "日",
+        title: "搭乘長榮航空平安返台",
+        highlights: "福岡市區出發 ➔ 福岡機場免稅店巡禮 ➔ 長榮 BR105 ➔ 桃園機場",
+        hotel: "溫暖的家",
+        items: [
+          {
+            id: "d9-1",
+            time: "09:40 ~ 10:15",
+            category: "train",
+            title: "博多駅 ➔ 福岡空港 (國際線航廈)",
+            locationName: "福岡機場國際線航廈",
+            query: "福岡機場 國際線",
+            transit: "福岡市地下鐵機場線至國內線 ➔ 搭乘免費接駁巴士至國際線航廈",
+            note: "福岡機場離市區極近，約10:15抵達辦理報到與託運行李",
+            cost: "260円"
+          },
+          {
+            id: "d9-2",
+            time: "10:30 ~ 12:00",
+            category: "spot",
+            title: "國際線出境 & 免稅店最後採購",
+            locationName: "福岡空港 免稅店",
+            query: "福岡空港 免稅店",
+            transit: "航廈內",
+            note: "購買福砂屋長崎蛋糕、明太子仙貝、博多通饅頭、獺祭等名產伴手禮",
+            cost: ""
+          },
+          {
+            id: "d9-3",
+            time: "12:15 ~ 13:50",
+            category: "flight",
+            title: "長榮航空 BR105 (福岡 ➔ 桃園 T2)",
+            locationName: "桃園國際機場第二航廈",
+            query: "桃園國際機場第二航廈",
+            transit: "長榮航空 BR105 直飛班機 (飛行時間約 2 小時 35 分)",
+            note: "滿載而歸！13:50 抵達台灣桃園機場，回到溫暖的家",
+            cost: ""
+          }
+        ]
+      }
+    ];
+
+    const budgetData = [
+      { item: "水戶住宿 (APA Hotel 水戶站前 2晚)", amount: "30,249 JPY", twd: "約 NT$ 6,565", note: "兩人合計" },
+      { item: "福岡住宿 (The b 博多)", amount: "—", twd: "約 NT$ 36,000", note: "兩人合計 (以刷卡帳單為準)" },
+      { item: "豪斯登堡度假住宿 (1晚)", amount: "52,384 JPY", twd: "約 NT$ 11,350", note: "兩人合計" },
+      { item: "豪斯登堡門票 (全日券)", amount: "—", twd: "NT$ 1,581", note: "每人費用" },
+      { item: "JR PASS 北九州鐵路周遊券 (5日券)", amount: "16,000 JPY", twd: "約 NT$ 3,480", note: "每人費用 (博多站綠色窗口兌換)" },
+      { item: "日本國內線航空 (天馬航空 茨城➔福岡)", amount: "—", twd: "約 NT$ 2,000", note: "每人單程 (SKY 835)" }
+    ];
+
+    /* ========================================================
+       APPLICATION STATE
+       ======================================================== */
+    let activeDayId = "day1";
+    let activeFilter = "all";
+    let searchQuery = "";
+    // Load completed checklist from localStorage
+    let completedItems = JSON.parse(localStorage.getItem("jp_trip_completed") || "{}");
+
+    /* ========================================================
+       RENDER FUNCTIONS
+       ======================================================== */
+    function initApp() {
+      renderNav();
+      renderCurrentDay();
+    }
+
+    function renderNav() {
+      const nav = document.getElementById("dayNav");
+      nav.innerHTML = "";
+
+      // Day buttons
+      itineraryData.forEach((day, index) => {
+        const isActive = activeDayId === day.id;
+        const btn = document.createElement("button");
+        btn.onclick = () => selectDay(day.id);
+        btn.className = `flex-shrink-0 flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+          isActive 
+            ? "bg-stone-900 text-white shadow-sm" 
+            : "bg-stone-100/80 text-stone-600 hover:bg-stone-200/80 hover:text-stone-900"
+        }`;
+        btn.innerHTML = `
+          <span>Day ${index + 1}</span>
+          <span class="text-[11px] opacity-75 font-normal">(${day.date})</span>
+        `;
+        nav.appendChild(btn);
+      });
+
+      // Budget Tab in Nav
+      const isBudgetActive = activeDayId === "budget";
+      const budgetBtn = document.createElement("button");
+      budgetBtn.onclick = () => selectDay("budget");
+      budgetBtn.className = `flex-shrink-0 flex items-center space-x-1 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+        isBudgetActive 
+          ? "bg-stone-900 text-white shadow-sm" 
+          : "bg-stone-100/80 text-stone-600 hover:bg-stone-200/80 hover:text-stone-900"
+      }`;
+      budgetBtn.innerHTML = `
+        <i class="ph ph-receipt"></i>
+        <span>預算費用</span>
+      `;
+      nav.appendChild(budgetBtn);
+    }
+
+    function selectDay(dayId) {
+      activeDayId = dayId;
+      renderNav();
+      renderCurrentDay();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderCurrentDay() {
+      const headerContainer = document.getElementById("dayHeaderContainer");
+      const filterToolbar = document.getElementById("filterToolbar");
+      const timelineContainer = document.getElementById("timelineContainer");
+      const budgetContainer = document.getElementById("budgetContainer");
+
+      if (activeDayId === "budget") {
+        headerContainer.classList.add("hidden");
+        filterToolbar.classList.add("hidden");
+        timelineContainer.classList.add("hidden");
+        budgetContainer.classList.remove("hidden");
+        renderBudget();
+        return;
+      }
+
+      headerContainer.classList.remove("hidden");
+      filterToolbar.classList.remove("hidden");
+      timelineContainer.classList.remove("hidden");
+      budgetContainer.classList.add("hidden");
+
+      const dayObj = itineraryData.find(d => d.id === activeDayId) || itineraryData[0];
+      const dayIndex = itineraryData.indexOf(dayObj) + 1;
+
+      // Render Day Header
+      headerContainer.innerHTML = `
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-md border border-amber-200/60">
+                DAY ${dayIndex} ・ ${dayObj.weekday}曜日
+              </span>
+              <span class="text-xs text-stone-400 font-medium">${dayObj.date}</span>
+            </div>
+            <h2 class="text-lg sm:text-xl font-bold text-stone-900 tracking-tight">${dayObj.title}</h2>
+            <p class="text-xs sm:text-sm text-stone-600 mt-1 flex items-center gap-1.5 flex-wrap">
+              <span class="text-stone-400">✨ 行程主軸：</span>${dayObj.highlights}
+            </p>
+          </div>
+          <div class="flex md:flex-col items-start md:items-end justify-between border-t md:border-t-0 pt-2.5 md:pt-0 border-stone-100 text-xs text-stone-500">
+            <span class="flex items-center gap-1 text-stone-700 font-medium">
+              <i class="ph ph-bed text-sm text-stone-400"></i> ${dayObj.hotel}
+            </span>
+            <span class="text-[11px] text-stone-400 mt-0.5">點擊卡片左側打勾可標記完成</span>
+          </div>
+        </div>
+      `;
+
+      // Filter and Render Items
+      renderTimelineItems(dayObj.items);
+    }
+
+    function renderTimelineItems(items) {
+      const timelineContainer = document.getElementById("timelineContainer");
+      timelineContainer.innerHTML = "";
+
+      let filtered = items.filter(item => {
+        // Tag Filter
+        if (activeFilter !== "all") {
+          if (activeFilter === "flight" && item.category !== "flight") return false;
+          if (activeFilter === "train" && item.category !== "train") return false;
+          if (activeFilter === "spot" && item.category !== "spot") return false;
+          if (activeFilter === "food" && item.category !== "food") return false;
+          if (activeFilter === "hotel" && item.category !== "hotel") return false;
+        }
+        // Search Filter
+        if (searchQuery.trim() !== "") {
+          const q = searchQuery.toLowerCase();
+          const matchTitle = item.title.toLowerCase().includes(q);
+          const matchLoc = item.locationName.toLowerCase().includes(q);
+          const matchNote = item.note.toLowerCase().includes(q);
+          const matchTransit = item.transit.toLowerCase().includes(q);
+          if (!matchTitle && !matchLoc && !matchNote && !matchTransit) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        timelineContainer.innerHTML = `
+          <div class="bg-white rounded-2xl border border-stone-200 p-8 text-center text-stone-400">
+            <i class="ph ph-magnifying-glass text-3xl mb-2"></i>
+            <p class="text-sm">沒有符合條件的行程項目</p>
+            <button onclick="resetFilters()" class="mt-3 text-xs text-stone-800 underline font-medium">重置篩選</button>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach((item) => {
+        const isCompleted = completedItems[item.id] || false;
+        const encodedQuery = encodeURIComponent(item.query || item.locationName);
+        const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedQuery}`;
+
+        // Badge styling based on category
+        let badgeConfig = {
+          label: "活動",
+          icon: "ph-star",
+          class: "bg-stone-100 text-stone-600 border-stone-200"
+        };
+        if (item.category === "flight") {
+          badgeConfig = { label: "航班", icon: "ph-airplane-tilt", class: "bg-sky-50 text-sky-700 border-sky-200" };
+        } else if (item.category === "train") {
+          badgeConfig = { label: "交通移動", icon: "ph-train", class: "bg-amber-50 text-amber-700 border-amber-200" };
+        } else if (item.category === "spot") {
+          badgeConfig = { label: "景點探索", icon: "ph-map-pin", class: "bg-emerald-50 text-emerald-700 border-emerald-200" };
+        } else if (item.category === "food") {
+          badgeConfig = { label: "美食餐飲", icon: "ph-fork-knife", class: "bg-orange-50 text-orange-700 border-orange-200" };
+        } else if (item.category === "hotel") {
+          badgeConfig = { label: "住宿落腳", icon: "ph-buildings", class: "bg-purple-50 text-purple-700 border-purple-200" };
+        }
+
+        const card = document.createElement("div");
+        card.className = `group bg-white border ${
+          isCompleted ? "border-stone-200 bg-stone-50/70 opacity-60" : "border-stone-200/90 shadow-sm hover:shadow-md"
+        } rounded-2xl p-4 sm:p-5 transition-all duration-200`;
+
+        card.innerHTML = `
+          <div class="flex items-start gap-3 sm:gap-4">
+            <!-- Checkbox button -->
+            <button onclick="toggleItemComplete('${item.id}')" title="${isCompleted ? '標記為未完成' : '標記為已完成'}" class="mt-0.5 flex-shrink-0 w-6 h-6 rounded-lg border flex items-center justify-center transition-all ${
+              isCompleted 
+                ? "bg-stone-800 border-stone-800 text-white" 
+                : "border-stone-300 text-transparent hover:border-stone-500 bg-white"
+            }">
+              <i class="ph ph-check text-xs font-bold"></i>
+            </button>
+
+            <!-- Card Content Body -->
+            <div class="flex-1 min-w-0">
+              <!-- Top Row: Time & Category Tag -->
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-stone-900 bg-stone-100 px-2 py-0.5 rounded-md">
+                    ${item.time}
+                  </span>
+                  <span class="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md border ${badgeConfig.class}">
+                    <i class="ph ${badgeConfig.icon}"></i>
+                    <span>${badgeConfig.label}</span>
+                  </span>
+                </div>
+                ${item.cost ? `
+                  <span class="text-[11px] font-mono text-amber-800 bg-amber-50/80 px-2 py-0.5 rounded-md border border-amber-200/50">
+                    💰 ${item.cost}
+                  </span>
+                ` : ''}
+              </div>
+
+              <!-- Main Title -->
+              <h3 class="text-sm sm:text-base font-bold text-stone-900 tracking-tight leading-snug mb-1 ${
+                isCompleted ? "line-through text-stone-500" : ""
+              }">
+                ${item.title}
+              </h3>
+
+              <!-- Transit / Moving Route Info if available -->
+              ${item.transit ? `
+                <div class="flex items-center gap-1.5 text-xs text-stone-500 mb-2 bg-stone-50 p-2 rounded-xl border border-stone-100">
+                  <i class="ph ph-path text-stone-400"></i>
+                  <span class="font-medium text-stone-700">交通：</span>
+                  <span class="truncate">${item.transit}</span>
+                </div>
+              ` : ''}
+
+              <!-- Description / Notes -->
+              ${item.note ? `
+                <div class="text-xs text-stone-600 mb-3 leading-relaxed whitespace-pre-line pl-0.5">
+                  ${item.note}
+                </div>
+              ` : ''}
+
+              <!-- Actions Bottom Bar -->
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-stone-100 text-xs">
+                <!-- Location Name -->
+                <div class="flex items-center gap-1 text-stone-500 max-w-[240px] sm:max-w-md truncate">
+                  <i class="ph ph-map-pin text-stone-400"></i>
+                  <span class="truncate text-[11px] sm:text-xs text-stone-600">${item.locationName}</span>
+                </div>
+
+                <!-- Action Buttons: Copy & Maps -->
+                <div class="flex items-center gap-1.5 ml-auto">
+                  <button onclick="copyToClipboard('${escapeJsString(item.locationName)}')" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-stone-200 text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors text-[11px] font-medium" title="複製名稱方便搜尋">
+                    <i class="ph ph-copy text-xs"></i>
+                    <span>複製</span>
+                  </button>
+                  <a href="${gmapsUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-stone-900 text-white hover:bg-stone-800 transition-colors text-[11px] font-medium shadow-xs">
+                    <i class="ph ph-navigation-arrow text-xs text-amber-300"></i>
+                    <span>Google 地圖</span>
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        `;
+        timelineContainer.appendChild(card);
+      });
+    }
+
+    function renderBudget() {
+      const budgetContainer = document.getElementById("budgetContainer");
+      budgetContainer.innerHTML = `
+        <div class="space-y-6 animate-in fade-in duration-200">
+          <div class="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-7 h-7 rounded-lg bg-stone-900 text-white flex items-center justify-center text-sm font-semibold">
+                ¥
+              </span>
+              <h2 class="text-lg font-bold text-stone-900">總體預算、大額交通與住宿費用結算表</h2>
+            </div>
+            <p class="text-xs text-stone-500 mb-5">
+              * 表列依附件備註整理。機票、JR PASS 與飯店費用可能依實際信用卡入帳匯率而有些微差異。
+            </p>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs text-stone-700">
+                <thead class="bg-stone-50 border-b border-stone-200 text-stone-500 uppercase tracking-wider text-[11px]">
+                  <tr>
+                    <th class="py-3 px-4">項目名稱</th>
+                    <th class="py-3 px-4">日幣金額 (JPY)</th>
+                    <th class="py-3 px-4">台幣金額 (NTD)</th>
+                    <th class="py-3 px-4">備註說明</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-stone-100 font-sans">
+                  ${budgetData.map(b => `
+                    <tr class="hover:bg-stone-50/70 transition-colors">
+                      <td class="py-3.5 px-4 font-semibold text-stone-900">${b.item}</td>
+                      <td class="py-3.5 px-4 font-mono text-stone-700 font-medium">${b.amount}</td>
+                      <td class="py-3.5 px-4 font-mono font-semibold text-amber-900">${b.twd}</td>
+                      <td class="py-3.5 px-4 text-stone-500 text-[11px]">${b.note}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="mt-6 p-4 rounded-xl bg-amber-50/60 border border-amber-200/60 text-xs text-amber-900 leading-relaxed flex items-start gap-2.5">
+              <i class="ph ph-info text-base text-amber-700 mt-0.5"></i>
+              <div>
+                <p class="font-semibold mb-0.5">交通票券使用小提醒：</p>
+                <p class="text-amber-800">
+                  1. <b>JR PASS 北九州版 (5日券 16,000円)</b>：可於抵達福岡後至博多站綠色窗口領取，適用後續博多往返肥前鹿島 (祐德神社)、豪斯登堡特急以及小倉、門司港等主要區段。<br/>
+                  2. <b>大洗鹿島線與巴士</b>：為地方私鐵或公車，需另行刷 IC 卡或投現金（大洗鹿島線單程 420円、水戶機場巴士 1,500円）。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ========================================================
+       INTERACTION HANDLERS
+       ======================================================== */
+    function setFilter(filterType) {
+      activeFilter = filterType;
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        if (btn.getAttribute("data-filter") === filterType) {
+          btn.className = "filter-btn px-3 py-1.5 rounded-full border border-stone-200 bg-stone-900 text-white font-medium transition-all shadow-xs";
+        } else {
+          btn.className = "filter-btn px-3 py-1.5 rounded-full border border-stone-200 bg-white text-stone-600 hover:bg-stone-100 transition-all";
+        }
+      });
+      renderCurrentDay();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val;
+      renderCurrentDay();
+    }
+
+    function resetFilters() {
+      activeFilter = "all";
+      searchQuery = "";
+      document.getElementById("searchInput").value = "";
+      setFilter("all");
+    }
+
+    function toggleItemComplete(itemId) {
+      completedItems[itemId] = !completedItems[itemId];
+      localStorage.setItem("jp_trip_completed", JSON.stringify(completedItems));
+      renderCurrentDay();
+    }
+
+    function clearCompletedForDay() {
+      const dayObj = itineraryData.find(d => d.id === activeDayId);
+      if (!dayObj) return;
+      dayObj.items.forEach(i => {
+        delete completedItems[i.id];
+      });
+      localStorage.setItem("jp_trip_completed", JSON.stringify(completedItems));
+      renderCurrentDay();
+      showToast("已重置當天完成狀態");
+    }
+
+    function copyToClipboard(text) {
+      const tempInput = document.createElement("input");
+      tempInput.style.position = "absolute";
+      tempInput.style.left = "-9999px";
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand("copy");
+        showToast(`已複製：「${text}」`);
+      } catch (err) {
+        showToast("複製失敗，請手動複製");
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      const toastMsg = document.getElementById("toastMsg");
+      toastMsg.innerText = message;
+      toast.classList.remove("opacity-0", "translate-y-2", "pointer-events-none");
+      toast.classList.add("opacity-100", "translate-y-0");
+
+      setTimeout(() => {
+        toast.classList.remove("opacity-100", "translate-y-0");
+        toast.classList.add("opacity-0", "translate-y-2", "pointer-events-none");
+      }, 2400);
+    }
+
+    function toggleModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal.classList.contains("hidden")) {
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+      } else {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      }
+    }
+
+    function escapeJsString(str) {
+      return (str || "").replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    // Close modal on escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        const modal = document.getElementById("tipsModal");
+        if (!modal.classList.contains("hidden")) {
+          toggleModal("tipsModal");
+        }
+      }
+    });
+
+    // Initialize application when DOM is ready
+    window.addEventListener("DOMContentLoaded", () => {
+      initApp();
+    });
+  </script>
+</body>
+</html>
